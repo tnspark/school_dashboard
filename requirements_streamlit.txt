@@ -1,0 +1,23 @@
+# TN Spark Dashboard - Python Dependencies
+# ======================================
+# This file contains all required Python packages for the Streamlit dashboard
+# Install using: pip install -r requirements_streamlit.txt
+
+# Core Streamlit framework for building interactive web applications
+# Documentation: https://docs.streamlit.io/
+streamlit==1.28.1
+
+# Data manipulation and analysis library
+# Provides DataFrame functionality for processing CSV data
+# Documentation: https://pandas.pydata.org/docs/
+pandas==2.1.3
+
+# Interactive plotting library for creating rich visualizations
+# Used for charts, graphs, and interactive plots
+# Documentation: https://plotly.com/python/
+plotly==5.18.0
+
+# Numerical computing library
+# Provides mathematical functions and array operations
+# Documentation: https://numpy.org/doc/
+numpy==1.25.2
