@@ -13,7 +13,8 @@ echo.
 REM Install Python dependencies from requirements file
 echo [1/2] Installing required Python packages...
 echo This may take a few minutes on first run...
-python -m pip install -r requirements_streamlit.txt
+REM Use the unified requirements file that matches the app code (supports width='stretch')
+python -m pip install -r requirements.txt
 
 REM Check if installation was successful
 if %errorlevel% equ 0 (
