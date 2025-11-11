@@ -1,0 +1,24 @@
+# TN Spark Dashboard - Full Dependencies (for advanced features)
+
+# Streamlit for the web app
+streamlit>=1.50.0
+
+# Core data libraries
+pandas>=2.1
+numpy>=1.25
+
+# Interactive charts
+plotly>=5.18
+
+# Advanced tables and interactivity (used in full dashboard)
+streamlit-aggrid>=0.3.5
+streamlit-plotly-events>=0.0.6
+
+# Exports (images)
+kaleido>=0.2.1
+
+# Optional: Excel/PDF exports (kept for completeness; not critical)
+reportlab>=4.0.9
+openpyxl>=3.1
+# pyarrow is often pulled in by Streamlit automatically; include if needed
+# pyarrow>=14.0
