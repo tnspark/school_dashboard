@@ -153,6 +153,22 @@ def can_export_png():
     except Exception:
         return False
 
+def offer_png_download(fig, filename, width=1200, height=600, scale=2):
+    """
+    Try to render a Plotly figure to PNG and expose a download button.
+    Returns True if the download button was shown, otherwise False.
+    """
+    if not can_export_png():
+        return False
+    try:
+        buf = BytesIO()
+        fig.write_image(buf, format='png', width=width, height=height, scale=scale)
+        st.download_button("🖼️ Download chart (PNG)", buf.getvalue(), file_name=filename, mime="image/png")
+        return True
+    except Exception:
+        st.warning("PNG export is not supported in this environment. Use the Plotly toolbar to download images from the browser.")
+        return False
+
 # Data Loading and Processing Functions
 # =====================================
 
@@ -472,11 +488,8 @@ if df is not None:  # Proceed only if data loading was successful
                     filtered_sel = chapters_data[chapters_data['School Name'] == sel_school]
                     AgGrid(filtered_sel, gridOptions=GridOptionsBuilder.from_dataframe(filtered_sel).build(), height=200, theme='alpine')
 
-            # Export chart as PNG (graceful fallback if kaleido missing)
-            if can_export_png():
-                buf = BytesIO()
-                fig_chapters.write_image(buf, format='png', width=1200, height=600, scale=2)
-                st.download_button("🖼️ Download chart (PNG)", buf.getvalue(), file_name="top_chapters.png", mime="image/png")
+            # Export chart as PNG (graceful fallback if environment disallows server-side export)
+            offer_png_download(fig_chapters, "top_chapters.png")
 
             col1, col2 = st.columns(2)
             with col1:
@@ -530,11 +543,8 @@ if df is not None:  # Proceed only if data loading was successful
                     if not sub.empty:
                         AgGrid(sub, gridOptions=GridOptionsBuilder.from_dataframe(sub).build(), height=220, theme='alpine')
 
-            # Export chart as PNG
-            if can_export_png():
-                buf_syl = BytesIO()
-                fig_syllabus.write_image(buf_syl, format='png', width=1200, height=600, scale=2)
-                st.download_button("🖼️ Download syllabus chart (PNG)", buf_syl.getvalue(), file_name="syllabus_completion.png", mime="image/png")
+            # Export chart as PNG (graceful fallback)
+            offer_png_download(fig_syllabus, "syllabus_completion.png")
 
             col1, col2, col3 = st.columns(3)
             with col1:
@@ -591,11 +601,8 @@ if df is not None:  # Proceed only if data loading was successful
                         gb.configure_column('school_name', pinned=True)
                         AgGrid(dtable, gridOptions=gb.build(), height=240, theme='alpine')
 
-                # Export chart as PNG
-                if can_export_png():
-                    bufd = BytesIO()
-                    fig_district.write_image(bufd, format='png', width=1200, height=600, scale=2)
-                    st.download_button("🖼️ Download district chart (PNG)", bufd.getvalue(), file_name="district_completion.png", mime="image/png")
+                # Export chart as PNG (graceful fallback)
+                offer_png_download(fig_district, "district_completion.png")
 
         with col2:
             # Note: Some data sources may provide the column as 'attedance_status' (typo).
@@ -650,10 +657,7 @@ if df is not None:  # Proceed only if data loading was successful
                 )
                 fig_trend = apply_plotly_enhancements(fig_trend)
                 st.plotly_chart(fig_trend, use_container_width=True)
-                if can_export_png():
-                    buf_tr = BytesIO()
-                    fig_trend.write_image(buf_tr, format='png', width=1200, height=600, scale=2)
-                    st.download_button("🖼️ Download trend chart (PNG)", buf_tr.getvalue(), file_name="completion_trend.png", mime="image/png")
+                offer_png_download(fig_trend, "completion_trend.png")
 
         # Alerts & Watchlists
         st.markdown("### 🔥 Alerts & Watchlists")
@@ -738,10 +742,7 @@ if df is not None:  # Proceed only if data loading was successful
                 )
                 fig_hm = apply_plotly_enhancements(fig_hm)
                 st.plotly_chart(fig_hm, use_container_width=True)
-                if can_export_png():
-                    buf_hm = BytesIO()
-                    fig_hm.write_image(buf_hm, format='png', width=1200, height=600, scale=2)
-                    st.download_button("🖼️ Download heatmap (PNG)", buf_hm.getvalue(), file_name="completion_heatmap.png", mime="image/png")
+            offer_png_download(fig_hm, "completion_heatmap.png")
 
 else:
     # Error handling for data loading failure
